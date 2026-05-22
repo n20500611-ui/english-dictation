@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>人教版英语五年级下册 - 听写练习</title>
+    <meta name="description" content="人教版PEP英语五年级下册单词和句子听写练习应用">
+    <meta name="theme-color" content="#667eea">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="英语听写">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            padding: 20px 10px;
+        }
+        
+        .header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.75em;
+            opacity: 0.9;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .unit-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .mode-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            color: #667eea;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .dictation-area {
+            text-align: center;
+            padding: 30px 10px;
+        }
+        
+        .play-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 2.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn.playing {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 5px 40px rgba(102, 126, 234, 0.8); }
+        }
+        
+        .hint-text {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .answer-input.correct {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+        }
+        
+        .answer-input.wrong {
+            border-color: #f44336;
+            background: #FFEBEE;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-skip {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        .btn-show {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+        
+        .result-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .result-correct {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+        
+        .result-wrong {
+            background: #FFEBEE;
+            color: #f44336;
+        }
+        
+        .correct-answer {
+            background: #E3F2FD;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .correct-answer .word {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1976D2;
+        }
+        
+        .correct-answer .chinese {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* 错题本样式 */
+        .wrong-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .wrong-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .wrong-item:last-child {
+            border-bottom: none;
+        }
+        
+        .wrong-item .word-info {
+            flex: 1;
+        }
+        
+        .wrong-item .word-text {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .wrong-item .word-chinese {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .wrong-item .wrong-count {
+            background: #FFEBEE;
+            color: #f44336;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+        
+        .wrong-item .remove-btn {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .clear-btn {
+            width: 100%;
+            padding: 12px;
+            background: #FFEBEE;
+            border: none;
+            border-radius: 10px;
+            color: #f44336;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .settings-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .setting-label {
+            color: #333;
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .speed-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .speed-value {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* 隐藏类 */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 400px) {
+            .header h1 {
+                font-size: 1.2em;
+            }
+            
+            .stat-number {
+                font-size: 1.4em;
+            }
+            
+            .play-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 2em;
+            }
+        }
+        
+        /* 错题练习提示 */
+        .wrong-mode-notice {
+            background: #FFF3E0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            color: #FF9800;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 人教版英语五年级下册</h1>
+            <p>听写练习 · 轻松掌握每一个单词</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalWords">0</div>
+                <div class="stat-label">总词数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="masteredWords">0</div>
+                <div class="stat-label">已掌握</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="wrongCount">0</div>
+                <div class="stat-label">错题数</div>
+            </div>
+        </div>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="dictation">📝 听写练习</button>
+            <button class="tab-btn" data-tab="wrong-book">📖 错题本</button>
+        </div>
+        
+        <!-- 听写练习页 -->
+        <div id="dictation-tab" class="tab-content">
+            <div class="card">
+                <select class="unit-select" id="unitSelect">
+                    <option value="all">全部单元</option>
+                </select>
+                
+                <div class="mode-select">
+                    <button class="mode-btn active" data-mode="word">单词听写</button>
+                    <button class="mode-btn" data-mode="sentence">句子听写</button>
+                    <button class="mode-btn" data-mode="wrong">错题复习</button>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">点击播放按钮开始听写</div>
+                
+                <div id="wrongModeNotice" class="wrong-mode-notice hidden">
+                    ⚠️ 错题复习模式：只练习错题本中的单词，答对3次后自动移出
+                </div>
+                
+                <div class="dictation-area">
+                    <button class="play-btn" id="playBtn">🔊</button>
+                    <p class="hint-text">点击播放听写内容</p>
+                </div>
+                
+                <input type="text" class="answer-input" id="answerInput" placeholder="输入答案后按回车提交">
+                
+                <div id="resultArea"></div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn btn-skip" id="skipBtn">跳过</button>
+                    <button class="action-btn btn-show" id="showBtn">显示答案</button>
+                    <button class="action-btn btn-submit" id="submitBtn">提交</button>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="setting-item">
+                        <span class="setting-label">播放速度</span>
+                        <div class="speed-control">
+                            <button class="speed-btn" id="speedDown">-</button>
+                            <span class="speed-value" id="speedValue">1.0x</span>
+                            <button class="speed-btn" id="speedUp">+</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">播放次数</span>
+                        <div class="speed-control">
+                            <button class="speed-btn" id="repeatDown">-</button>
+                            <span class="speed-value" id="repeatValue">2次</span>
+                            <button class="speed-btn" id="repeatUp">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 错题本页 -->
+        <div id="wrong-book-tab" class="tab-content hidden">
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">📖 错题本</h3>
+                <div class="wrong-list" id="wrongList">
+                    <div class="empty-state">
+                        <div class="icon">🎉</div>
+                        <p>太棒了！暂无错题</p>
+                    </div>
+                </div>
+                <button class="clear-btn" id="clearWrongBtn">清空错题本</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// 人教版PEP英语五年级下册词汇表
+const vocabulary = {
+  "Unit 1: My day": [
+    { word: "eat breakfast", chinese: "吃早饭" },
+    { word: "have ... class", chinese: "上...课" },
+    { word: "play sports", chinese: "进行体育运动" },
+    { word: "do morning exercises", chinese: "做早操" },
+    { word: "eat dinner", chinese: "吃晚饭" },
+    { word: "clean my room", chinese: "打扫我的房间" },
+    { word: "go for a walk", chinese: "去散步" },
+    { word: "go shopping", chinese: "去购物；买东西" },
+    { word: "take a dancing class", chinese: "上舞蹈课" },
+    { word: "when", chinese: "什么时候；何时" },
+    { word: "after", chinese: "在...后" },
+    { word: "start", chinese: "开始" },
+    { word: "usually", chinese: "通常地；惯常地" },
+    { word: "Spain", chinese: "西班牙" },
+    { word: "late", chinese: "晚；迟" },
+    { word: "a.m.", chinese: "午前；上午" },
+    { word: "p.m.", chinese: "午后；下午" },
+    { word: "why", chinese: "为什么" },
+    { word: "shop", chinese: "去买东西；购物" },
+    { word: "work", chinese: "工作" },
+    { word: "last", chinese: "上一个的；刚过去的" },
+    { word: "sound", chinese: "听起来好像" },
+    { word: "also", chinese: "还；也" },
+    { word: "busy", chinese: "忙的" },
+    { word: "need", chinese: "需要" },
+    { word: "play", chinese: "戏剧；剧本" },
+    { word: "letter", chinese: "信" },
+    { word: "live", chinese: "住；居住" },
+    { word: "island", chinese: "岛" },
+    { word: "always", chinese: "总是；一直" },
+    { word: "cave", chinese: "山洞；洞穴" },
+    { word: "go swimming", chinese: "去游泳" },
+    { word: "win", chinese: "获胜" }
+  ],
+  "Unit 2: My favourite season": [
+    { word: "spring", chinese: "春天" },
+    { word: "summer", chinese: "夏天" },
+    { word: "autumn", chinese: "秋天" },
+    { word: "winter", chinese: "冬天" },
+    { word: "season", chinese: "季节" },
+    { word: "picnic", chinese: "野餐" },
+    { word: "go on a picnic", chinese: "去野餐" },
+    { word: "pick", chinese: "摘；采集" },
+    { word: "pick apples", chinese: "摘苹果" },
+    { word: "snowman", chinese: "雪人" },
+    { word: "make a snowman", chinese: "堆雪人" },
+    { word: "go swimming", chinese: "去游泳" },
+    { word: "which", chinese: "哪一个" },
+    { word: "best", chinese: "最；最高程度地" },
+    { word: "snow", chinese: "雪" },
+    { word: "good job", chinese: "做得好" },
+    { word: "because", chinese: "因为" },
+    { word: "vacation", chinese: "假期" },
+    { word: "all", chinese: "全；完全" },
+    { word: "pink", chinese: "粉色；粉色的" },
+    { word: "lovely", chinese: "可爱的；美丽的" },
+    { word: "leaf", chinese: "叶子（复数leaves）" },
+    { word: "fall", chinese: "落下；秋天" },
+    { word: "paint", chinese: "用颜料绘画" },
+    { word: "beautiful", chinese: "美丽的" },
+    { word: "colourful", chinese: "多彩的" },
+    { word: "lots of", chinese: "许多" },
+    { word: "colour", chinese: "颜色" },
+    { word: "sky", chinese: "天空" },
+    { word: "cloud", chinese: "云" },
+    { word: "beach", chinese: "海滩；沙滩" },
+    { word: "sea", chinese: "海；海洋" },
+    { word: "sunny", chinese: "阳光充足的" },
+    { word: "cool", chinese: "凉爽的" }
+  ],
+  "Unit 3: My school calendar": [
+    { word: "January", chinese: "一月" },
+    { word: "February", chinese: "二月" },
+    { word: "March", chinese: "三月" },
+    { word: "April", chinese: "四月" },
+    { word: "May", chinese: "五月" },
+    { word: "June", chinese: "六月" },
+    { word: "July", chinese: "七月" },
+    { word: "August", chinese: "八月" },
+    { word: "September", chinese: "九月" },
+    { word: "October", chinese: "十月" },
+    { word: "November", chinese: "十一月" },
+    { word: "December", chinese: "十二月" },
+    { word: "calendar", chinese: "日历" },
+    { word: "few", chinese: "一些" },
+    { word: "a few", chinese: "一些" },
+    { word: "thing", chinese: "事情" },
+    { word: "meet", chinese: "聚会；开会" },
+    { word: "sports meet", chinese: "运动会" },
+    { word: "trip", chinese: "旅行" },
+    { word: "plant", chinese: "种植" },
+    { word: "contest", chinese: "比赛；竞赛" },
+    { word: "the Great Wall", chinese: "长城" },
+    { word: "National Day", chinese: "国庆节" },
+    { word: "American", chinese: "美国的" },
+    { word: "Thanksgiving", chinese: "感恩节" },
+    { word: "Christmas", chinese: "圣诞节" },
+    { word: "holiday", chinese: "假日；节日" },
+    { word: "game", chinese: "游戏" },
+    { word: "roll", chinese: "滚动" },
+    { word: "chocolate", chinese: "巧克力" },
+    { word: "Easter", chinese: "复活节" },
+    { word: "Mid-Autumn Day", chinese: "中秋节" },
+    { word: "Teachers' Day", chinese: "教师节" },
+    { word: "Children's Day", chinese: "儿童节" },
+    { word: "New Year's Day", chinese: "元旦" },
+    { word: "Tree Planting Day", chinese: "植树节" },
+    { word: "May Day", chinese: "五一劳动节" },
+    { word: "Mother's Day", chinese: "母亲节" },
+    { word: "Father's Day", chinese: "父亲节" }
+  ],
+  "Unit 4: When is the art show?": [
+    { word: "first", chinese: "第一的" },
+    { word: "second", chinese: "第二的" },
+    { word: "third", chinese: "第三的" },
+    { word: "fourth", chinese: "第四的" },
+    { word: "fifth", chinese: "第五的" },
+    { word: "special", chinese: "特殊的；特别的" },
+    { word: "kitten", chinese: "小猫" },
+    { word: "diary", chinese: "日记" },
+    { word: "still", chinese: "仍然；依旧；还是" },
+    { word: "noise", chinese: "声音；响声；噪音" },
+    { word: "fur", chinese: "动物皮毛；（兽类的）软毛" },
+    { word: "open", chinese: "开着的" },
+    { word: "walk", chinese: "行走" },
+    { word: "one", chinese: "一" },
+    { word: "two", chinese: "二" },
+    { word: "three", chinese: "三" },
+    { word: "four", chinese: "四" },
+    { word: "five", chinese: "五" },
+    { word: "six", chinese: "六" },
+    { word: "seven", chinese: "七" },
+    { word: "eight", chinese: "八" },
+    { word: "nine", chinese: "九" },
+    { word: "ten", chinese: "十" },
+    { word: "eleven", chinese: "十一" },
+    { word: "twelve", chinese: "十二" },
+    { word: "thirteen", chinese: "十三" },
+    { word: "twenty", chinese: "二十" },
+    { word: "thirtieth", chinese: "第三十的" },
+    { word: "twenty-first", chinese: "第二十一的" },
+    { word: "twenty-third", chinese: "第二十三的" },
+    { word: "thirtieth", chinese: "第三十的" },
+    { word: "birthday", chinese: "生日" },
+    { word: "date", chinese: "日期" },
+    { word: "art show", chinese: "美术展览" },
+    { word: "festival", chinese: "节日" },
+    { word: "young", chinese: "年轻的" }
+  ],
+  "Unit 5: Whose dog is it?": [
+    { word: "mine", chinese: "我的" },
+    { word: "yours", chinese: "你（们）的" },
+    { word: "his", chinese: "他的" },
+    { word: "hers", chinese: "她的" },
+    { word: "theirs", chinese: "他们的；她们的；它们的" },
+    { word: "ours", chinese: "我们的" },
+    { word: "climbing", chinese: "正在攀爬；（动词climb的ing形式）" },
+    { word: "eating", chinese: "正在吃；（动词eat的ing形式）" },
+    { word: "playing", chinese: "正在玩；（动词play的ing形式）" },
+    { word: "jumping", chinese: "正在跳；（动词jump的ing形式）" },
+    { word: "drinking", chinese: "正在喝；（动词drink的ing形式）" },
+    { word: "sleeping", chinese: "正在睡觉；（动词sleep的ing形式）" },
+    { word: "each", chinese: "每一；各个" },
+    { word: "each other", chinese: "相互" },
+    { word: "excited", chinese: "兴奋的；激动的" },
+    { word: "like", chinese: "像...那样" },
+    { word: "Is he drinking water?", chinese: "他在喝水吗？" },
+    { word: "No, he isn't.", chinese: "不，他没有。" },
+    { word: "He's eating.", chinese: "他正在吃东西。" },
+    { word: "Are these rabbits eating?", chinese: "这些兔子在吃东西吗？" },
+    { word: "No, they aren't.", chinese: "不，它们没有。" },
+    { word: "They're playing with each other.", chinese: "它们正在一起玩耍。" },
+    { word: "Whose book is this?", chinese: "这是谁的书？" },
+    { word: "It's mine.", chinese: "它是我的。" },
+    { word: "Whose dog is it?", chinese: "这是谁的狗？" },
+    { word: "It's hers.", chinese: "它是她的。" }
+  ],
+  "Unit 6: Work quietly!": [
+    { word: "doing morning exercises", chinese: "正在做早操" },
+    { word: "having ... class", chinese: "正在上...课" },
+    { word: "eating lunch", chinese: "正在吃午饭" },
+    { word: "reading a book", chinese: "正在看书" },
+    { word: "listening to music", chinese: "正在听音乐" },
+    { word: "keep", chinese: "保持某种状态" },
+    { word: "keep to the right", chinese: "靠右" },
+    { word: "keep your desk clean", chinese: "保持你的课桌干净" },
+    { word: "talk quietly", chinese: "小声说话" },
+    { word: "take turns", chinese: "按顺序来" },
+    { word: "quietly", chinese: "安静地；悄悄地" },
+    { word: "turn", chinese: "顺序；轮流" },
+    { word: "show", chinese: "给人看；指引" },
+    { word: "anything", chinese: "任何事物" },
+    { word: "else", chinese: "另外；其他" },
+    { word: "exhibition", chinese: "展览" },
+    { word: "say", chinese: "说；讲" },
+    { word: "sushi", chinese: "寿司" },
+    { word: "teach", chinese: "教" },
+    { word: "sure", chinese: "当然" },
+    { word: "Canadian", chinese: "加拿大的" },
+    { word: "Spanish", chinese: "西班牙的" },
+    { word: "What are they doing?", chinese: "它们在做什么？" },
+    { word: "They're eating lunch.", chinese: "它们正在吃午饭。" },
+    { word: "What's the little monkey doing?", chinese: "那只小猴子在做什么？" },
+    { word: "It's playing with its mother.", chinese: "它正在和妈妈玩耍。" },
+    { word: "Do you see any pandas?", chinese: "你看到熊猫了吗？" },
+    { word: "Yes, I do.", chinese: "是的，我看到了。" },
+    { word: "Talk quietly.", chinese: "小声说话。" },
+    { word: "Keep your desk clean.", chinese: "保持你的课桌干净。" },
+    { word: "Work quietly.", chinese: "安静工作。" },
+    { word: "Take turns.", chinese: "按顺序来。" },
+    { word: "Keep to the right.", chinese: "靠右行。" }
+  ]
+};
+
+// 重点句子（用于句子听写）
+const sentences = {
+  "Unit 1: My day": [
+    { english: "When do you get up?", chinese: "你什么时候起床？" },
+    { english: "I usually get up at 6:30.", chinese: "我通常6:30起床。" },
+    { english: "What do you do on the weekend?", chinese: "你周末做什么？" },
+    { english: "I often go shopping with my mum.", chinese: "我经常和我妈妈去购物。" },
+    { english: "When do you eat breakfast?", chinese: "你什么时候吃早饭？" },
+    { english: "I eat breakfast at 7:00.", chinese: "我7点吃早饭。" },
+    { english: "I sometimes go for a walk on Sundays.", chinese: "我有时候周日去散步。" }
+  ],
+  "Unit 2: My favourite season": [
+    { english: "Which season do you like best?", chinese: "你最喜欢哪个季节？" },
+    { english: "I like winter best.", chinese: "我最喜欢冬天。" },
+    { english: "Why do you like winter?", chinese: "你为什么喜欢冬天？" },
+    { english: "Because I can make a snowman.", chinese: "因为我可以堆雪人。" },
+    { english: "I like summer because I can go swimming.", chinese: "我喜欢夏天因为我可以去游泳。" },
+    { english: "Spring is green with flowers and songs.", chinese: "春天是绿色的，有花有歌声。" },
+    { english: "Autumn is golden and farmers are busy.", chinese: "秋天是金色的，农民很忙。" },
+    { english: "Winter is white and the year is gone.", chinese: "冬天是白色的，一年过去了。" }
+  ],
+  "Unit 3: My school calendar": [
+    { english: "When is the sports meet?", chinese: "运动会在什么时候？" },
+    { english: "It's in April.", chinese: "它在四月。" },
+    { english: "When is Tree Planting Day?", chinese: "植树节在什么时候？" },
+    { english: "It's in March.", chinese: "它在三月。" },
+    { english: "We have a school trip in May.", chinese: "我们五月有一次学校旅行。" },
+    { english: "My birthday is in July.", chinese: "我的生日在七月。" },
+    { english: "When is Children's Day?", chinese: "儿童节在什么时候？" },
+    { english: "It's on June 1st.", chinese: "它在六月一日。" }
+  ],
+  "Unit 4: When is the art show?": [
+    { english: "When is the art show?", chinese: "美术展在什么时候？" },
+    { english: "It's on May 1st.", chinese: "它在五月一日。" },
+    { english: "When is your birthday?", chinese: "你的生日在什么时候？" },
+    { english: "My birthday is on April 4th.", chinese: "我的生日在四月四日。" },
+    { english: "The kittens are so cute.", chinese: "这些小猫真可爱。" },
+    { english: "Their eyes are open.", chinese: "它们的眼睛睁开了。" },
+    { english: "They can walk now.", chinese: "它们现在会走路了。" },
+    { english: "When is Mother's Day?", chinese: "母亲节在什么时候？" },
+    { english: "It's on the second Sunday in May.", chinese: "它在五月的第二个星期日。" }
+  ],
+  "Unit 5: Whose dog is it?": [
+    { english: "Whose book is this?", chinese: "这是谁的书？" },
+    { english: "It's mine.", chinese: "它是我的。" },
+    { english: "Whose dog is it?", chinese: "这是谁的狗？" },
+    { english: "It's hers.", chinese: "它是她的。" },
+    { english: "Is he drinking water?", chinese: "他在喝水吗？" },
+    { english: "No, he isn't.", chinese: "不，他没有。" },
+    { english: "Are these rabbits eating?", chinese: "这些兔子在吃东西吗？" },
+    { english: "They're playing with each other.", chinese: "它们正在一起玩耍。" },
+    { english: "The rabbit is jumping.", chinese: "兔子正在跳。" },
+    { english: "The tiger is running.", chinese: "老虎正在跑。" }
+  ],
+  "Unit 6: Work quietly!": [
+    { english: "What are they doing?", chinese: "它们在做什么？" },
+    { english: "They're eating lunch.", chinese: "它们正在吃午饭。" },
+    { english: "What's the little monkey doing?", chinese: "那只小猴子在做什么？" },
+    { english: "It's playing with its mother.", chinese: "它正在和妈妈玩耍。" },
+    { english: "Talk quietly.", chinese: "小声说话。" },
+    { english: "Keep your desk clean.", chinese: "保持你的课桌干净。" },
+    { english: "Work quietly.", chinese: "安静工作。" },
+    { english: "Take turns.", chinese: "按顺序来。" },
+    { english: "Keep to the right.", chinese: "靠右行。" },
+    { english: "Can we use your crayons?", chinese: "我们可以用你的蜡笔吗？" },
+    { english: "OK. Take turns.", chinese: "好的。按顺序来。" }
+  ]
+};
+</script>
+    <script>
+        // 应用状态
+        const state = {
+            currentMode: 'word', // word, sentence, wrong
+            currentUnit: 'all',
+            currentIndex: 0,
+            playSpeed: 1.0,
+            repeatCount: 2,
+            currentWord: null,
+            wrongBook: {},
+            masteredWords: new Set(),
+            isPlaying: false
+        };
+
+        // DOM 元素
+        const elements = {
+            unitSelect: document.getElementById('unitSelect'),
+            playBtn: document.getElementById('playBtn'),
+            answerInput: document.getElementById('answerInput'),
+            submitBtn: document.getElementById('submitBtn'),
+            skipBtn: document.getElementById('skipBtn'),
+            showBtn: document.getElementById('showBtn'),
+            resultArea: document.getElementById('resultArea'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            wrongModeNotice: document.getElementById('wrongModeNotice'),
+            wrongList: document.getElementById('wrongList'),
+            clearWrongBtn: document.getElementById('clearWrongBtn'),
+            totalWords: document.getElementById('totalWords'),
+            masteredWords: document.getElementById('masteredWords'),
+            wrongCount: document.getElementById('wrongCount'),
+            speedValue: document.getElementById('speedValue'),
+            repeatValue: document.getElementById('repeatValue')
+        };
+
+        // 初始化
+        function init() {
+            loadFromStorage();
+            populateUnitSelect();
+            updateStats();
+            renderWrongList();
+            bindEvents();
+            updateProgress();
+        }
+
+        // 从localStorage加载数据
+        function loadFromStorage() {
+            const savedWrongBook = localStorage.getItem('english_wrongBook');
+            const savedMastered = localStorage.getItem('english_mastered');
+            
+            if (savedWrongBook) {
+                state.wrongBook = JSON.parse(savedWrongBook);
+            }
+            if (savedMastered) {
+                state.masteredWords = new Set(JSON.parse(savedMastered));
+            }
+        }
+
+        // 保存到localStorage
+        function saveToStorage() {
+            localStorage.setItem('english_wrongBook', JSON.stringify(state.wrongBook));
+            localStorage.setItem('english_mastered', JSON.stringify([...state.masteredWords]));
+        }
+
+        // 填充单元选择
+        function populateUnitSelect() {
+            const units = Object.keys(vocabulary);
+            units.forEach((unit, index) => {
+                const option = document.createElement('option');
+                option.value = unit;
+                option.textContent = unit;
+                elements.unitSelect.appendChild(option);
+            });
+        }
+
+        // 获取当前练习列表
+        function getCurrentList() {
+            if (state.currentMode === 'wrong') {
+                // 错题模式：从错题本获取
+                const wrongItems = [];
+                for (const key in state.wrongBook) {
+                    const item = state.wrongBook[key];
+                    wrongItems.push({
+                        word: item.word,
+                        chinese: item.chinese,
+                        key: key,
+                        type: item.type || 'word'
+                    });
+                }
+                return wrongItems;
+            }
+            
+            const source = state.currentMode === 'word' ? vocabulary : sentences;
+            let list = [];
+            
+            if (state.currentUnit === 'all') {
+                for (const unit in source) {
+                    source[unit].forEach((item, index) => {
+                        const key = `${state.currentMode}-${unit}-${index}`;
+                        // 如果不是错题模式，跳过已掌握的单词
+                        if (!state.masteredWords.has(key)) {
+                            list.push({ ...item, unit, key, type: state.currentMode });
+                        }
+                    });
+                }
+            } else {
+                if (source[state.currentUnit]) {
+                    source[state.currentUnit].forEach((item, index) => {
+                        const key = `${state.currentMode}-${state.currentUnit}-${index}`;
+                        if (!state.masteredWords.has(key)) {
+                            list.push({ ...item, unit: state.currentUnit, key, type: state.currentMode });
+                        }
+                    });
+                }
+            }
+            
+            return list;
+        }
+
+        // 随机获取下一个
+        function getNextWord() {
+            const list = getCurrentList();
+            if (list.length === 0) {
+                return null;
+            }
+            const randomIndex = Math.floor(Math.random() * list.length);
+            return list[randomIndex];
+        }
+
+        // 播放语音
+        function playAudio(text, times = state.repeatCount) {
+            if (state.isPlaying) return;
+            state.isPlaying = true;
+            elements.playBtn.classList.add('playing');
+            
+            let count = 0;
+            
+            function speak() {
+                if (count >= times) {
+                    state.isPlaying = false;
+                    elements.playBtn.classList.remove('playing');
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = state.playSpeed;
+                
+                utterance.onend = () => {
+                    count++;
+                    setTimeout(() => {
+                        if (count < times) {
+                            speak();
+                        } else {
+                            state.isPlaying = false;
+                            elements.playBtn.classList.remove('playing');
+                        }
+                    }, 500);
+                };
+                
+                utterance.onerror = () => {
+                    state.isPlaying = false;
+                    elements.playBtn.classList.remove('playing');
+                };
+                
+                speechSynthesis.speak(utterance);
+            }
+            
+            speak();
+        }
+
+        // 检查答案
+        function checkAnswer(userAnswer) {
+            if (!state.currentWord) return;
+            
+            const correctAnswer = state.currentWord.word || state.currentWord.english;
+            const key = state.currentWord.key;
+            
+            // 标准化比较（忽略大小写和多余空格）
+            const normalizedUser = userAnswer.trim().toLowerCase();
+            const normalizedCorrect = correctAnswer.trim().toLowerCase();
+            
+            const isCorrect = normalizedUser === normalizedCorrect;
+            
+            if (isCorrect) {
+                // 答对
+                showResult(true, correctAnswer, state.currentWord.chinese);
+                elements.answerInput.classList.add('correct');
+                
+                // 从错题本移除或减少错误次数
+                if (state.wrongBook[key]) {
+                    state.wrongBook[key].correctCount = (state.wrongBook[key].correctCount || 0) + 1;
+                    // 连续答对3次，从错题本移除
+                    if (state.wrongBook[key].correctCount >= 3) {
+                        delete state.wrongBook[key];
+                        state.masteredWords.add(key);
+                    }
+                } else {
+                    // 首次答对，加入已掌握
+                    state.masteredWords.add(key);
+                }
+                
+                saveToStorage();
+                updateStats();
+                renderWrongList();
+                
+                // 自动进入下一个
+                setTimeout(() => {
+                    nextWord();
+                }, 1500);
+            } else {
+                // 答错
+                showResult(false, correctAnswer, state.currentWord.chinese);
+                elements.answerInput.classList.add('wrong');
+                
+                // 加入错题本
+                if (!state.wrongBook[key]) {
+                    state.wrongBook[key] = {
+                        word: correctAnswer,
+                        chinese: state.currentWord.chinese,
+                        wrongCount: 0,
+                        correctCount: 0,
+                        type: state.currentMode,
+                        addedAt: Date.now()
+                    };
+                }
+                state.wrongBook[key].wrongCount++;
+                state.wrongBook[key].lastWrongAt = Date.now();
+                
+                // 从已掌握移除
+                state.masteredWords.delete(key);
+                
+                saveToStorage();
+                updateStats();
+                renderWrongList();
+            }
+        }
+
+        // 显示结果
+        function showResult(isCorrect, word, chinese) {
+            let html = '';
+            if (isCorrect) {
+                html = `
+                    <div class="result-message result-correct">
+                        ✅ 正确！太棒了！
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="result-message result-wrong">
+                        ❌ 错误，正确答案是：
+                    </div>
+                    <div class="correct-answer">
+                        <div class="word">${word}</div>
+                        <div class="chinese">${chinese}</div>
+                    </div>
+                `;
+            }
+            elements.resultArea.innerHTML = html;
+        }
+
+        // 下一个单词
+        function nextWord() {
+            state.currentWord = getNextWord();
+            elements.answerInput.value = '';
+            elements.answerInput.classList.remove('correct', 'wrong');
+            elements.resultArea.innerHTML = '';
+            
+            if (!state.currentWord) {
+                elements.progressText.textContent = '🎉 恭喜！全部完成！';
+                elements.resultArea.innerHTML = `
+                    <div class="result-message result-correct">
+                        🎉 太棒了！你已经掌握了所有内容！
+                    </div>
+                `;
+                return;
+            }
+            
+            updateProgress();
+            
+            // 自动播放
+            setTimeout(() => {
+                const text = state.currentWord.word || state.currentWord.english;
+                playAudio(text);
+            }, 300);
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const list = getCurrentList();
+            const total = list.length;
+            const mastered = state.masteredWords.size;
+            
+            // 计算进度百分比
+            const allItems = [];
+            const source = state.currentMode === 'word' ? vocabulary : sentences;
+            if (state.currentUnit === 'all') {
+                for (const unit in source) {
+                    allItems.push(...source[unit]);
+                }
+            } else {
+                allItems.push(...(source[state.currentUnit] || []));
+            }
+            
+            const totalAll = allItems.length;
+            const percent = totalAll > 0 ? Math.round((totalAll - total) / totalAll * 100) : 0;
+            
+            elements.progressFill.style.width = `${percent}%`;
+            elements.progressText.textContent = `剩余 ${total} 个待练习`;
+        }
+
+        // 更新统计
+        function updateStats() {
+            // 计算总词数
+            let total = 0;
+            for (const unit in vocabulary) {
+                total += vocabulary[unit].length;
+            }
+            for (const unit in sentences) {
+                total += sentences[unit].length;
+            }
+            
+            elements.totalWords.textContent = total;
+            elements.masteredWords.textContent = state.masteredWords.size;
+            elements.wrongCount.textContent = Object.keys(state.wrongBook).length;
+        }
+
+        // 渲染错题列表
+        function renderWrongList() {
+            const wrongKeys = Object.keys(state.wrongBook);
+            
+            if (wrongKeys.length === 0) {
+                elements.wrongList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🎉</div>
+                        <p>太棒了！暂无错题</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            wrongKeys.forEach(key => {
+                const item = state.wrongBook[key];
+                html += `
+                    <div class="wrong-item">
+                        <div class="word-info">
+                            <div class="word-text">${item.word}</div>
+                            <div class="word-chinese">${item.chinese}</div>
+                        </div>
+                        <span class="wrong-count">错${item.wrongCount}次</span>
+                        <button class="remove-btn" data-key="${key}">✕</button>
+                    </div>
+                `;
+            });
+            
+            elements.wrongList.innerHTML = html;
+            
+            // 绑定移除事件
+            elements.wrongList.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const key = e.target.dataset.key;
+                    delete state.wrongBook[key];
+                    state.masteredWords.add(key);
+                    saveToStorage();
+                    updateStats();
+                    renderWrongList();
+                });
+            });
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // Tab切换
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    const tab = e.target.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // 单元选择
+            elements.unitSelect.addEventListener('change', (e) => {
+                state.currentUnit = e.target.value;
+                state.currentWord = null;
+                updateProgress();
+            });
+            
+            // 模式选择
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    state.currentMode = e.target.dataset.mode;
+                    
+                    // 显示/隐藏错题模式提示
+                    if (state.currentMode === 'wrong') {
+                        elements.wrongModeNotice.classList.remove('hidden');
+                        elements.unitSelect.disabled = true;
+                    } else {
+                        elements.wrongModeNotice.classList.add('hidden');
+                        elements.unitSelect.disabled = false;
+                    }
+                    
+                    state.currentWord = null;
+                    updateProgress();
+                });
+            });
+            
+            // 播放按钮
+            elements.playBtn.addEventListener('click', () => {
+                if (!state.currentWord) {
+                    nextWord();
+                } else {
+                    const text = state.currentWord.word || state.currentWord.english;
+                    playAudio(text);
+                }
+            });
+            
+            // 提交按钮
+            elements.submitBtn.addEventListener('click', () => {
+                const answer = elements.answerInput.value.trim();
+                if (answer) {
+                    checkAnswer(answer);
+                }
+            });
+            
+            // 回车提交
+            elements.answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const answer = elements.answerInput.value.trim();
+                    if (answer) {
+                        checkAnswer(answer);
+                    }
+                }
+            });
+            
+            // 跳过
+            elements.skipBtn.addEventListener('click', () => {
+                nextWord();
+            });
+            
+            // 显示答案
+            elements.showBtn.addEventListener('click', () => {
+                if (state.currentWord) {
+                    const word = state.currentWord.word || state.currentWord.english;
+                    showResult(false, word, state.currentWord.chinese);
+                    elements.answerInput.value = word;
+                }
+            });
+            
+            // 速度控制
+            document.getElementById('speedDown').addEventListener('click', () => {
+                if (state.playSpeed > 0.5) {
+                    state.playSpeed = Math.round((state.playSpeed - 0.1) * 10) / 10;
+                    elements.speedValue.textContent = `${state.playSpeed}x`;
+                }
+            });
+            
+            document.getElementById('speedUp').addEventListener('click', () => {
+                if (state.playSpeed < 2.0) {
+                    state.playSpeed = Math.round((state.playSpeed + 0.1) * 10) / 10;
+                    elements.speedValue.textContent = `${state.playSpeed}x`;
+                }
+            });
+            
+            // 重复次数控制
+            document.getElementById('repeatDown').addEventListener('click', () => {
+                if (state.repeatCount > 1) {
+                    state.repeatCount--;
+                    elements.repeatValue.textContent = `${state.repeatCount}次`;
+                }
+            });
+            
+            document.getElementById('repeatUp').addEventListener('click', () => {
+                if (state.repeatCount < 5) {
+                    state.repeatCount++;
+                    elements.repeatValue.textContent = `${state.repeatCount}次`;
+                }
+            });
+            
+            // 清空错题本
+            elements.clearWrongBtn.addEventListener('click', () => {
+                if (confirm('确定要清空错题本吗？')) {
+                    state.wrongBook = {};
+                    saveToStorage();
+                    updateStats();
+                    renderWrongList();
+                }
+            });
+        }
+
+        // 启动应用
+        init();
+    </script>
+</body>
+</html>
