@@ -666,7 +666,43 @@
             return list[randomIndex];
         }
 
-        // 播放语音
+        // 检测是否在Android WebView中
+        function isAndroidWebView() {
+            const ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('android') > -1 && ua.indexOf('mobile') > -1;
+        }
+        
+        // 使用在线TTS播放（备用方案）
+        function playAudioOnline(text, times, callback) {
+            // 使用ResponsiveVoice或Google TTS
+            // Google Translate TTS URL（免费但可能有限制）
+            const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&q=${encodeURIComponent(text)}&client=tw-ob`;
+            
+            let count = 0;
+            const audio = new Audio();
+            
+            audio.onended = () => {
+                count++;
+                if (count < times) {
+                    setTimeout(() => audio.play(), 500);
+                } else {
+                    callback();
+                }
+            };
+            
+            audio.onerror = () => {
+                console.log('Online TTS failed, trying Web Speech API');
+                callback();
+            };
+            
+            audio.src = ttsUrl;
+            audio.play().catch(e => {
+                console.log('Audio play failed:', e);
+                callback();
+            });
+        }
+        
+        // 播放语音（支持Android）
         function playAudio(text, times = state.repeatCount) {
             if (state.isPlaying) return;
             state.isPlaying = true;
@@ -674,7 +710,15 @@
             
             let count = 0;
             
-            function speak() {
+            // 检查Web Speech API是否可用
+            const hasWebSpeech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+            
+            // 在Android WebView中，先尝试获取语音列表
+            if (hasWebSpeech && speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.onvoiceschanged = () => {};
+            }
+            
+            function speakWithWebSpeech() {
                 if (count >= times) {
                     state.isPlaying = false;
                     elements.playBtn.classList.remove('playing');
@@ -685,11 +729,18 @@
                 utterance.lang = 'en-US';
                 utterance.rate = state.playSpeed;
                 
+                // 尝试选择英语语音
+                const voices = speechSynthesis.getVoices();
+                const englishVoice = voices.find(v => v.lang.startsWith('en'));
+                if (englishVoice) {
+                    utterance.voice = englishVoice;
+                }
+                
                 utterance.onend = () => {
                     count++;
                     setTimeout(() => {
                         if (count < times) {
-                            speak();
+                            speakWithWebSpeech();
                         } else {
                             state.isPlaying = false;
                             elements.playBtn.classList.remove('playing');
@@ -697,15 +748,41 @@
                     }, 500);
                 };
                 
-                utterance.onerror = () => {
-                    state.isPlaying = false;
-                    elements.playBtn.classList.remove('playing');
+                utterance.onerror = (e) => {
+                    console.log('Web Speech error:', e);
+                    // Web Speech失败时，使用在线TTS
+                    playAudioOnline(text, times - count, () => {
+                        state.isPlaying = false;
+                        elements.playBtn.classList.remove('playing');
+                    });
                 };
                 
+                // 取消之前的语音
+                speechSynthesis.cancel();
                 speechSynthesis.speak(utterance);
+                
+                // 检测是否真的在播放（Android WebView可能静默失败）
+                setTimeout(() => {
+                    if (!speechSynthesis.speaking && state.isPlaying) {
+                        console.log('Web Speech not speaking, using online TTS');
+                        playAudioOnline(text, times - count, () => {
+                            state.isPlaying = false;
+                            elements.playBtn.classList.remove('playing');
+                        });
+                    }
+                }, 1000);
             }
             
-            speak();
+            // 先尝试Web Speech API
+            if (hasWebSpeech) {
+                speakWithWebSpeech();
+            } else {
+                // 没有Web Speech API，直接使用在线TTS
+                playAudioOnline(text, times, () => {
+                    state.isPlaying = false;
+                    elements.playBtn.classList.remove('playing');
+                });
+            }
         }
 
         // 检查答案
